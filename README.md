@@ -1,3 +1,12 @@
+
+<div align="center">
+  <img src="https://repository-images.githubusercontent.com/265612990/de2df880-b6d7-11ea-9415-9df7a9a2fec2" height=200px width=200px />
+
+# Hedera Local Node
+
+Run your own local Hedera network for development purposes with the Local Node project.
+</div>
+
 <div align="center">
 
 [![Smoke Tests](https://github.com/hashgraph/hedera-local-node/actions/workflows/flow-pull-request-checks.yaml/badge.svg?branch=main)](https://github.com/hashgraph/hedera-local-node/actions/workflows/flow-pull-request-checks.yaml)[![npm (tag)](https://img.shields.io/npm/v/@hashgraph/hedera-local)](https://www.npmjs.com/package/@hashgraph/hedera-local)
@@ -6,17 +15,47 @@
 [![License](https://img.shields.io/badge/license-apache2-blue.svg)](LICENSE)
 
 </div>
-The Hedera Local Node project allows developers to set up their own local network. The local network is composed of one mirror node and one consensus node. You can set this up by either using the CLI tool or by running Docker.
-</br></br>
 
-> **_NOTE:_**  It's recomended to start using the CLI Tool.
+**Table of Contents**
 
-- [Docker](#docker)
-- [CLI Tool](#cli-tool---hashgraphhedera-local)
+- [The Hedera Network](#the-hedera-network)
+- [What is a Local Node?](#what-is-a-local-node)
+- [Requirements](#requirements)
+- [Setup](#setup)
+  - [With the `hedera-local` CLI Tool](#with-the-hedera-local-cli-tool)
+    - [Install via npm](#install-via-npm)
+    - [Install Locally](#install-locally)
+    - [Working with npm](#working-with-npm)
+    - [Working with `hedera-local`](#working-with-hedera-local)
+      - [CLI Commands](#cli-commands)
+  - [With Docker](#with-docker)
+    - [Start Your Local Network](#start-your-local-network)
+    - [Stop Your Local Network](#stop-your-local-network)
+    - [Network Variables](#network-variables)
+    - [Directory Setup](#directory-setup)
+    - [Advanced Configuration](#advanced-configuration)
+      - [Memory Limits](#memory-limits)
+      - [Environment Variables](#environment-variables)
+- [Exposed Endpoints](#exposed-endpoints)
+- [Monitoring and Analytics](#monitoring-and-analytics)
+  - [Prometheus](#prometheus)
+  - [Grafana](#grafana)
+- [Support](#support)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [License](#license)
+
 - [Environment Variables](./docs/environment-variables.md)
-- [Grafana & Prometheus](#grafana--prometheus)
 
-# Requirements
+## The Hedera Network
+
+The Hedera network is TK.
+
+## What is a Local Node?
+
+A local node is a local instance of the Hedera network. Developers can stand up their own local networks to test out various features for development purposes. A local node is composed of one mirror node and one consensus node. See [INSERT_DOCS_HERE]() for more details.
+
+## Requirements
 
 - [Node.js](https://nodejs.org/) `>= v14.x`
   - Node version check: `node -v`
@@ -28,9 +67,7 @@ The Hedera Local Node project allows developers to set up their own local networ
   - Docker Compose version check: `docker compose version`
 - Minimum 16GB RAM
 
-### Note:
-
-- **Ensure the `VirtioFS` file sharing implementation is enabled in the docker settings.**
+**Ensure that the `VirtioFS` file sharing implementation is enabled in the Docker settings.**
 
 **Note**: The image may look different if you are on a different version
 ![docker-compose-settings.png](.github/docker-compose-settings.png)
@@ -49,18 +86,18 @@ The Hedera Local Node project allows developers to set up their own local networ
 **Note**: The image may look different if you are on a different version
 ![docker-socket-setting](https://github.com/hashgraph/hedera-local-node/assets/56278409/9946dad6-27a9-4293-b37b-5286dd30d250)
 
-# CLI Tool - @hashgraph/hedera-local
+## Setup
 
-## What
+You can stand up a local network using either the `@hashgraph/hedera-local` CLI tool or Docker—we recommend the CLI tool.
 
-This package defines cli commands, that can be executed via node (npx), for interacting with the Local Hedera
-Network.
+### With the CLI Tool
 
-## Installation
+The `@hashgraph/hedera-local` package defines CLI commands that can be executed via node (npx) to interact with the local Hedera
+network.
 
-#### Official NPM Release
+#### Install via npm
 
-The command below can be used to install the official release from the NPM repository. This version may not reflect
+The command below can be used to install the official release from the npm repository. This version may not reflect
 the most recent changes to the `main` branch of this repository.
 
 This version uses a baked in version of the Docker Compose definitions and will not reflect any local changes made to
@@ -70,7 +107,7 @@ the repository.
 npm install @hashgraph/hedera-local -g
 ```
 
-#### Local Development Installation
+#### Install locally
 
 The command below can be used to install the `hedera-local` module as a symlink against your locally checked out copy of
 this repository.
@@ -81,18 +118,18 @@ This is the recommended method for testing against the latest changes or a point
 npm install && npm install -g
 ```
 
-## Using npm
+#### Working with npm
 
 `npm run start` to start the network
 `npm run restart` to restart the network
 `npm run stop` to stop the network
 `npm run generate-accounts` to generate new account for already started network
 
-> **_NOTE:_**  If you want to use any of the CLI options listed below, you'd need to pass `--` after `npm run start` (for example) and then specify the wanted option. For example, if you want to start in detached mode, you can use `npm run start -- -d`
+**_NOTE:_** If you want to use any of the CLI options listed below, you'd need to pass `--` after `npm run start` (for example) and then specify the wanted option. For example, if you want to start in detached mode, you can use `npm run start -- -d`
 
-> **_WARNING:_** While stopping the networks, we will first list all Docker networks with the `hedera-` prefix in their names. This operation may affect not only the networks initiated by the `npm run start` command from this repository but also any other networks you have created with this prefix. Network termination can be triggered both by a direct `npm run stop` call and by the `npm run start` script if the initial startup process fails and failover recovery is activated. One of the recovery steps includes attempting to close all previously started networks with the `hedera-` prefix.
+**_WARNING:_** While stopping the networks, we will first list all Docker networks with the `hedera-` prefix in their names. This operation may affect not only the networks initiated by the `npm run start` command from this repository but also any other networks you have created with this prefix. Network termination can be triggered both by a direct `npm run stop` call and by the `npm run start` script if the initial startup process fails and failover recovery is activated. One of the recovery steps includes attempting to close all previously started networks with the `hedera-` prefix.
 
-## Using hedera-local
+#### Working with hedera-local
 
 ```
 $ hedera
@@ -136,9 +173,9 @@ Note: Generated accounts are 3 types (ECDSA, Alias ECDSA and ED25519). All of th
 
 Note: Read more about `developer mode` [here](https://github.com/hashgraph/hedera-json-rpc-relay/blob/main/docs/dev-mode.md)
 
-### Commands
+##### CLI Commands
 
-#### `hedera start <options>`
+**`hedera start <options>`**
 
 ![Demo](.github/demo-start.gif)
 
@@ -147,7 +184,7 @@ Note: Read more about `developer mode` [here](https://github.com/hashgraph/heder
 
 - --h / --host - Override the default host.
 
-#### `hedera restart <options>`
+**`hedera restart <options>`**
 
 ![Demo](.github/demo-restart.gif)
 
@@ -156,7 +193,7 @@ Note: Read more about `developer mode` [here](https://github.com/hashgraph/heder
 
 - --h / --host - Override the default host.
 
-#### `hedera start -d <options>`
+**`hedera start -d <options>`**
 
 ```bash
 $ hedera start
@@ -281,7 +318,7 @@ $ hedera start --accounts=2
 
 ---
 
-#### `hedera stop`
+**`hedera stop`**
 
 ```bash
 $ hedera stop
@@ -295,7 +332,7 @@ No available options
 
 ---
 
-#### `hedera restart -d <options>`
+**`hedera restart -d <options>`**
 
 ```bash
 $ hedera restart
@@ -425,7 +462,7 @@ $ hedera restart --accounts=2
 
 ---
 
-#### `hedera generate-accounts <num>`
+**`hedera generate-accounts <num>`**
 
 ```bash
 $ hedera generate-accounts 2
@@ -456,7 +493,7 @@ $ hedera generate-accounts 2
 
 ---
 
-#### You can use it in a hardhat project by adding the following config:
+You can use it in a hardhat project by adding the following config:
 
 ```bash
 defaultNetwork: 'local',
@@ -479,40 +516,45 @@ defaultNetwork: 'local',
 
 ---
 
-# Docker
+### With Docker
 
-> **_NOTE:_**  This will not create accounts on startup, nor will perform any kind of checks.
+**_NOTE:_** This will not create accounts on startup nor perform any kinds of checks.
 
-## Start Your Local Network
+### Start Your Local Network
 
-1. Clone the `hedera-local-node` repo
+1. Clone the `hedera-local-node` repo:
 
 ```bash
 git clone https://github.com/hashgraph/hedera-local-node.git
 ```
 
-2. CD to the hedera-local-node directory
+2. Navigate to the hedera-local-node directory:
 
 ```bash
     cd hedera-local-node
 ```
 
-For Windows users: You will need to update the file endings of `compose-network/mirror-node/init.sh` by running this in WSL:
+Windows users: You must update the file endings of `compose-network/mirror-node/init.sh` by running the following command in WSL:
 
 ```bash
     dos2unix compose-network/mirror-node/init.sh
 ```
 
-3. Run `docker compose up -d` from the terminal to get the network up and running
-4. Set-up your local network client by following this [tutorial](https://docs.hedera.com/guides/docs/sdks/set-up-your-local-network)
+3. Start the terminal to get the network up and running:
 
-## Stop Your Local Network
+```bash
+docker compose up -d
+```
 
-1. Run `docker compose down -v; git clean -xfd; git reset --hard` to stop and remove the containers, volumes and clean manually generated files. If you would like to keep any files created manually in the working directory please save them before executing this command.
+4. Proceed to [the tutorial for setting up a local network](https://docs.hedera.com/guides/docs/sdks/set-up-your-local-network).
 
-## Network Variables
+### Stop Your Local Network
 
-These are the local network variables to interact with the consensus and mirror node.
+Run `docker compose down -v; git clean -xfd; git reset --hard` to stop and remove the containers, volumes and clean manually generated files. If you would like to keep any files created manually in the working directory please save them before executing this command.
+
+### Network Variables
+
+These are the local network variables to interact with the consensus and mirror node:
 
 - Consensus Node Endpoint
 
@@ -536,7 +578,7 @@ These are the local network variables to interact with the consensus and mirror 
   - `302e020100300506032b65700422042091132178e72057a1d7528025956fe39b0b847f200ab59b2fdd367017f3087137`
   - The private key to account 0.0.2 to sign transactions and queries with
 
-## Folder set up
+### Directory Setup
 
 1. `compose-network` folder has the static files needed for starting Local network.
 2. `compose-network/grafana/dashboards` folder contains the Grafana dashboard definitions in JSON format which will be automatically provisioned at startup.
@@ -551,9 +593,11 @@ The local node writes its ephemeral data to a `working directory` which can be s
 | Linux   | `~/.local/share/hedera-local`                |
 | Windows | `%USERPROFILE%\AppData\Local\hedera-local`   |
 
-## Steps to change the memory limits, properties and other configurations
+### Advanced Configuration
 
-The following environment variables can be changed in the `.env` file for various memory limits
+#### Memory Limits
+
+The following environment variables can be changed in the `.env` file for various memory limits:
 
 1. Platform
    - PLATFORM_JAVA_HEAP_MIN
@@ -571,7 +615,11 @@ The following environment variables can be changed in the `.env` file for variou
 
 &#10008; The keys under `network-node` (`hedera.key`, `hedera.crt` and the `keys` folder) are only intended to be used for testing with this docker based local network. These keys should not be used with any other networks.
 
-# Exposed Endpoints
+#### Environment Variables
+
+See the [Environment Variables doc](./docs/environment-variables.md) for the complete list.
+
+## Exposed Endpoints
 
 | Type                              | Endpoint                                         |
 | --------------------------------- | ------------------------------------------------ |
@@ -584,13 +632,15 @@ The following environment variables can be changed in the `.env` file for variou
 | Grafana UI                        | [http://localhost:3000](http://localhost:3000)   |
 | Prometheus UI                     | [http://localhost:9090](http://localhost:9090)   |
 
-# Grafana & Prometheus
+## Monitoring and Analytics
 
-## Accessing Prometheus
+Local Node uses Prometheus and Grafana for monitoring, alerting, and analytics.
+
+### Prometheus
 
 The deployed Prometheus instance may be accessed from [http://localhost:9090](http://localhost:9090) and no credentials are required.
 
-## Accessing Grafana
+### Grafana
 
 The deployed Grafana instance may be accessed from [http://localhost:3000](http://localhost:3000) and the following default credentials are needed at first login:
 
@@ -598,7 +648,7 @@ The deployed Grafana instance may be accessed from [http://localhost:3000](http:
 | --------- | -------- |
 | admin     | admin    |
 
-## Adding New Dashboards
+#### Adding New Dashboards
 
 Creating new dashboards may be accomplished using the Grafana visual editor; however, these dashboards will not persist after a `docker compose down -v` command
 or any other command which removes the named volumes.
@@ -608,18 +658,18 @@ Dashboards may be exported as JSON definitions and placed under the `compose-net
 Any dashboard definitions placed into the root of the `compose-network/grafana/dashboards` folder will appear under the `General` folder in the Grafana dashboard list
 Placing dashboards under a subfolder will result in a new folder in the Grafana dashboard list and the dashboards will be deployed under the folder.
 
-# Support
+## Support
 
 If you have a question on how to use the product, please see our [support guide](https://github.com/hashgraph/.github/blob/main/SUPPORT.md).
 
-# Contributing
+## Contributing
 
 Contributions are welcome. Please see the [contributing guide](https://github.com/hashgraph/.github/blob/main/CONTRIBUTING.md) to see how you can get involved.
 
-# Code of Conduct
+## Code of Conduct
 
 This project is governed by the [Contributor Covenant Code of Conduct](https://github.com/hashgraph/.github/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code of conduct. Please report unacceptable behavior to oss@hedera.com.
 
-# License
+## License
 
 [Apache License 2.0](https://github.com/hashgraph/hedera-json-rpc-relay/blob/main/LICENSE)
