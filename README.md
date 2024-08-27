@@ -23,21 +23,21 @@ Run your own local Hedera network for development purposes with the Local Node p
 - [The Hedera Network](#the-hedera-network)
 - [What is a Local Node?](#what-is-a-local-node)
 - [Requirements](#requirements)
-- [Setup](#setup)
-  - [With the `hedera-local` CLI Tool](#with-the-hedera-local-cli-tool)
-    - [Install via npm](#install-via-npm)
-    - [Install Locally](#install-locally)
-    - [Working with npm](#working-with-npm)
-    - [Working with `hedera-local`](#working-with-hedera-local)
-      - [CLI Commands](#cli-commands)
-  - [With Docker](#with-docker)
-    - [Start Your Local Network](#start-your-local-network)
-    - [Stop Your Local Network](#stop-your-local-network)
-    - [Network Variables](#network-variables)
-    - [Directory Setup](#directory-setup)
-    - [Advanced Configuration](#advanced-configuration)
-      - [Memory Limits](#memory-limits)
-      - [Environment Variables](#environment-variables)
+- [Getting Started](#getting-started)
+  - [Configure Docker](#configure-docker)
+  - [Install the `hedera-local` CLI Tool](#install-the-hedera-local-cli-tool)
+    - [Global npm Installation](#global-npm-installation)
+    - [Local Development Installation](#local-development-installation)
+- [Working with `hedera-local`]
+  - [CLI Commands](#cli-commands)
+- [Running a Local Node Manually with Docker](#running-a-local-node-manually-with-docker)
+  - [Start the Local Network](#start-the-local-network)
+  - [Stop the Local Network](#stop-the-local-network)
+  - [Network Variables](#network-variables)
+  - [Directory Setup](#directory-setup)
+  - [Advanced Configuration](#advanced-configuration)
+    - [Memory Limits](#memory-limits)
+    - [Environment Variables](#environment-variables)
 - [Exposed Endpoints](#exposed-endpoints)
 - [Monitoring and Analytics](#monitoring-and-analytics)
   - [Prometheus](#prometheus)
@@ -59,79 +59,66 @@ A local node is a local instance of the Hedera network. Developers can stand up 
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/) `>= v14.x`
-  - Node version check: `node -v`
-- NPM `>= v6.14.17`
-  - NPM version check: `npm -v`
-- [Docker](https://www.docker.com/) `>= v20.10.x`
-  - Docker version check: `docker -v`
-- [Docker Compose](https://docs.docker.com/compose/) `=> v2.12.2`
-  - Docker Compose version check: `docker compose version`
-- Minimum 16GB RAM
+Before continuing, ensure that you have the following software installed:
 
-**Ensure that the `VirtioFS` file sharing implementation is enabled in the Docker settings.**
+* [Node.js](https://nodejs.org/) >= v14.x (Check version: `node -v`)
+* [npm](https://www.npmjs.com/) >= v6.14.17 (Check version: `npm -v`)
+* [Docker](https://www.docker.com/) >= v20.10.x (Check version: `docker -v`)
+* [Docker Compose](https://docs.docker.com/compose/) >= v2.12.3 (Check version: `docker compose version`)
 
-**Note**: The image may look different if you are on a different version
-![docker-compose-settings.png](.github/docker-compose-settings.png)
+Hardware requirements: minimum 16 GB RAM
 
-- Ensure the following configurations are set at minimum in Docker **Settings** -> **Resources** and are available for use
+## Getting Started
+
+### Configure Docker
+
+The `hedera-local` tool uses Docker behind the scenes, so you'll need to configure Docker according to the following specifications to run a local node.
+
+Open Docker and navigate to **Settings > General**. Make sure that the **VirtioFS** file sharing implementation is selected.
+
+In **Settings > Resources**, ensure the following minimum resources are available:
+
   - **CPUs:** 6
-  - **Memory:** 8GB
+  - **Memory:** 8 GB
   - **Swap:** 1 GB
   - **Disk Image Size:** 64 GB
 
-**Note**: The image may look different if you are on a different version
-![settings.png](.github/settings.png)
+In **Settings > Advanced**, make sure that **Allow the default Docker sockets to be used (requires password)** is checked.
 
-- Ensure the **`Allow the default Docker sockets to be used (requires password)`** is enabled in Docker **Settings -> Advanced**.
+### Install the `hedera-local` CLI Tool
 
-**Note**: The image may look different if you are on a different version
-![docker-socket-setting](https://github.com/hashgraph/hedera-local-node/assets/56278409/9946dad6-27a9-4293-b37b-5286dd30d250)
+To run a local node using the `hedera-local` CLI tool, you can either install it globally via npm, or else run it locally from a clone of [the `hedera-local-node` GitHub repo](https://github.com/hashgraph/hedera-local-node). The [global npm installation](#global-npm-installation) is generally recommended for most users unless you specifically need to test the latest changes to the repo, in which case you should follow the [local development installation](#local-development-installation) instructions.
 
-## Setup
+#### Global npm Installation
 
-You can stand up a local network using either the `@hashgraph/hedera-local` CLI tool or Docker—we recommend the CLI tool.
-
-### With the CLI Tool
-
-The `@hashgraph/hedera-local` package defines CLI commands that can be executed via node (npx) to interact with the local Hedera
-network.
-
-#### Install via npm
-
-The command below can be used to install the official release from the npm repository. This version may not reflect
-the most recent changes to the `main` branch of this repository.
-
-This version uses a baked in version of the Docker Compose definitions and will not reflect any local changes made to
-the repository.
+Run the following command to install the `@hashgraph/hedera-local` CLI tool globally:
 
 ```bash
 npm install @hashgraph/hedera-local -g
 ```
 
-#### Install locally
+Now you can use [the `hedera` commands](#hedera-commands) from any starting place in your terminal when [running your node](#running-the-node).
 
-The command below can be used to install the `hedera-local` module as a symlink against your locally checked out copy of
-this repository.
+#### Local Development Installation
 
-This is the recommended method for testing against the latest changes or a point in time version from a branch/tag.
+Clone the `hedera-local-node` repo and navigate to the project directory:
+
+```bash
+git clone https://github.com/hashgraph/hedera-local-node.git 
+cd hedera-local-node
+```
+
+Install the necessary dependencies in the `hedera-local-node` directory:
 
 ```bash
 npm install && npm install -g
 ```
 
-#### Working with npm
+Now you can use `npm run start`, `npm run stop`, and `npm run restart` within the project directory to start, stop, and restart the node, respectively.
 
-`npm run start` to start the network
-`npm run restart` to restart the network
-`npm run stop` to stop the network
-`npm run generate-accounts` to generate new account for already started network
+**_WARNING:_** While stopping the networks, we first list all Docker networks with the `hedera-` prefix in their names. This operation may affect not only the networks initiated by the `npm run start` command from this repository but also any other networks you have created with this prefix. Network termination can be triggered both by a direct `npm run stop` call and by the `npm run start` script if the initial startup process fails and failover recovery is activated. One of the recovery steps includes attempting to close all previously started networks with the `hedera-` prefix.
 
-**_NOTE:_** If you want to use any of the CLI options listed below, you'd need to pass `--` after `npm run start` (for example) and then specify the wanted option. For example, if you want to start in detached mode, you can use `npm run start -- -d`
-
-**_WARNING:_** While stopping the networks, we will first list all Docker networks with the `hedera-` prefix in their names. This operation may affect not only the networks initiated by the `npm run start` command from this repository but also any other networks you have created with this prefix. Network termination can be triggered both by a direct `npm run stop` call and by the `npm run start` script if the initial startup process fails and failover recovery is activated. One of the recovery steps includes attempting to close all previously started networks with the `hedera-` prefix.
-
-#### Working with hedera-local
+## Working with hedera-local
 
 ```
 $ hedera
@@ -175,7 +162,7 @@ Note: Generated accounts are 3 types (ECDSA, Alias ECDSA and ED25519). All of th
 
 Note: Read more about `developer mode` [here](https://github.com/hashgraph/hedera-json-rpc-relay/blob/main/docs/dev-mode.md)
 
-##### CLI Commands
+### CLI Commands
 
 **`hedera start <options>`**
 
@@ -518,11 +505,11 @@ defaultNetwork: 'local',
 
 ---
 
-### With Docker
+## Running a Local Node Manually with Docker
 
 **_NOTE:_** This will not create accounts on startup nor perform any kinds of checks.
 
-### Start Your Local Network
+### Start the Local Network
 
 1. Clone the `hedera-local-node` repo:
 
@@ -550,7 +537,7 @@ docker compose up -d
 
 4. Proceed to [the tutorial for setting up a local network](https://docs.hedera.com/guides/docs/sdks/set-up-your-local-network).
 
-### Stop Your Local Network
+### Stop the Local Network
 
 Run `docker compose down -v; git clean -xfd; git reset --hard` to stop and remove the containers, volumes and clean manually generated files. If you would like to keep any files created manually in the working directory please save them before executing this command.
 
