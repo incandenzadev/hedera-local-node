@@ -19,7 +19,7 @@ Run your own local Hedera network for development purposes with the Local Node p
   - [Install the `hedera-local` CLI Tool](#install-the-hedera-local-cli-tool)
     - [Global npm Installation](#global-npm-installation)
     - [Local Development Installation](#local-development-installation)
-- [Working with `hedera-local`]
+- [Working with `hedera-local`](#working-with-hedera-local)
   - [CLI Commands](#cli-commands)
 - [Running a Local Node Manually with Docker](#running-a-local-node-manually-with-docker)
   - [Start the Local Network](#start-the-local-network)
