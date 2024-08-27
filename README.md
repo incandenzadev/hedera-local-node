@@ -1,7 +1,9 @@
 
 <div align="center">
   <img src="https://repository-images.githubusercontent.com/265612990/de2df880-b6d7-11ea-9415-9df7a9a2fec2" height=200px width=200px />
+</div>
 
+<div align="center">
 # Hedera Local Node
 
 Run your own local Hedera network for development purposes with the Local Node project.
@@ -49,7 +51,7 @@ Run your own local Hedera network for development purposes with the Local Node p
 
 ## The Hedera Network
 
-The Hedera network is TK.
+Hedera is an open-source, public, proof-of-stake network. Its network services offer low and fixed fees, 10k TPS, and instant transaction finality. Learn more about [the Hedera platform and how it works](https://hedera.com/how-it-works).
 
 ## What is a Local Node?
 
