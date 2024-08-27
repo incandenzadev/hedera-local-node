@@ -46,7 +46,7 @@ Hedera is an open-source, public, proof-of-stake network. Its network services o
 
 ## What is a Local Node?
 
-A local node is a local instance of the Hedera network. Developers can stand up their own local networks to test out various features for development purposes. A local node is composed of one mirror node and one consensus node. See [INSERT_DOCS_HERE]() for more details.
+A local node is a local instance of the Hedera network. Developers can stand up their own local networks to test out various features for development purposes. A local node is composed of one mirror node and one consensus node.
 
 ## Requirements
 
