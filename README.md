@@ -1,22 +1,13 @@
+<img src="https://repository-images.githubusercontent.com/265612990/de2df880-b6d7-11ea-9415-9df7a9a2fec2" height=200px width=200px />
 
-<div align="center">
-  <img src="https://repository-images.githubusercontent.com/265612990/de2df880-b6d7-11ea-9415-9df7a9a2fec2" height=200px width=200px />
-</div>
-
-<div align="center">
 # Hedera Local Node
 
 Run your own local Hedera network for development purposes with the Local Node project.
-</div>
-
-<div align="center">
 
 [![Smoke Tests](https://github.com/hashgraph/hedera-local-node/actions/workflows/flow-pull-request-checks.yaml/badge.svg?branch=main)](https://github.com/hashgraph/hedera-local-node/actions/workflows/flow-pull-request-checks.yaml)[![npm (tag)](https://img.shields.io/npm/v/@hashgraph/hedera-local)](https://www.npmjs.com/package/@hashgraph/hedera-local)
 [![Environment Variables](https://img.shields.io/badge/env-docs-green.svg)](docs/environment-variables.md)
 [![Made With](https://img.shields.io/badge/made_with-typescript-blue)](https://github.com/hashgraph/hederajson-rpc-relay/)
 [![License](https://img.shields.io/badge/license-apache2-blue.svg)](LICENSE)
-
-</div>
 
 **Table of Contents**
 
